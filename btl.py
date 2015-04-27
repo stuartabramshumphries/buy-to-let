@@ -10,8 +10,14 @@ def main():
     for i in range(1,yrs+1):
         ival = ival *(1 + gr)
         if ival >= startval * 1.25:
-            print "year     %d      val %.2f "  % ( i, ival)
+            print "remortgaging!"
+            newfunds = 0.75 * (ival - startval)
+            ival = ival + ( newfunds / (1 -ltv))
+            startval = ival
 
+        print "year     %d      val %.2f "  % ( i, ival)
+
+    
 
 if __name__ == '__main__':
     main()
