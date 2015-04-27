@@ -9,8 +9,8 @@ def main():
     startval = ival = ib/(1-ltv)
     for i in range(1,yrs+1):
         ival = ival *(1 + gr)
-            if ival >= startval * 1.25:
-                print "year     %d      val %.2f "  % ( i, ival)
+        if ival >= startval * 1.25:
+            print "year     %d      val %.2f "  % ( i, ival)
 
 
 if __name__ == '__main__':
