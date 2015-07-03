@@ -5,11 +5,14 @@ def main():
     ir = 0.04         # interest rates
     gr = 0.05         # property growth rate
     ltv = 0.75        # loan to value
-    ib = 160000       # initial deposit/balance
+    ib = 80000        # initial deposit/balance
     yrs = 10          # years to model
-    yld = 0.035
+    yld = 0.035       # rental yield
+    savings=     0    # amount added by savings
+
     startval = ival = ib/(1-ltv)
     for i in range(1, yrs+1):
+        ival += savings
         ival = ival * (1 + gr)
         if ival >= startval * (2-ltv):
             print "remo"
