@@ -4,10 +4,10 @@
 
 def main():
     ir = 0.03  # interest rates
-    gr = 0.05  # property growth rate
-    ltv = 0.75  # loan to value
+    gr = 0.04  # property growth rate
+    ltv = 0.60  # loan to value
     ib = 140000  # initial deposit/balance
-    yrs = 20  # years to model
+    yrs = 10  # years to model
     yld = 0.05  # rental yield
     savings = 0  # amount added by savings
 
