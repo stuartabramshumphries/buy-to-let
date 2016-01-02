@@ -5,7 +5,7 @@
 def main():
     ir = 0.03  # interest rates
     gr = 0.05  # property growth rate
-    ltv = 0.60  # loan to value
+    ltv = 0.75  # loan to value
     ib = 140000  # initial deposit/balance
     yrs = 20  # years to model
     yld = 0.05  # rental yield
