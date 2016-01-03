@@ -3,12 +3,12 @@
 
 
 def main():
-    ir = 0.03  # interest rates
-    gr = 0.04  # property growth rate
+    ir = 0.05  # interest rates
+    gr = 0.03  # property growth rate
     ltv = 0.60  # loan to value
     ib = 140000  # initial deposit/balance
     yrs = 10  # years to model
-    yld = 0.05  # rental yield
+    yld = 0.04  # rental yield
     savings = 0  # amount added by savings
 
     startval = ival = ib / (1 - ltv)
@@ -19,22 +19,33 @@ def main():
             print 'remortgaging as value increased enough:'
             newfunds = ltv * (ival - startval)
             ival = ival + newfunds / (1 - ltv)
-            startval = ival
+        startval = ival
         rent = startval * yld - ltv * ir * startval
         tax = (startval * yld - (0.2*ltv * ir * startval))*0.45
         netrent = rent -tax
         ival = ival + netrent
         print 'year\t\t%d\t totval %d   val %.2f rent %d netrent %d' % (i, ival,
                 ival * (1.0 - ltv),rent, netrent)
-    cal_gr(ib,ival,yrs,ltv)
 
-def cal_gr(ib,ival,yrs,ltv):
-    # trying to get what the ir is given initial balance and final balance
-    from math import pow
-    ival = ival * (1.0 - ltv)
-    r = pow((ival/ib),1.0/yrs) -1
-    r = r*100
-    print "Your effective annual return is %0.2f percent" %  r
+    class Calgr(object):
+    
+        def __init__(self,ib,ival,yrs,ltv):
+            self.ib = ib
+            self.ival = ival
+            self.yrs = yrs
+            self.ltv = ltv
+    
+        def irate(self):
+        # trying to get what the ir is given initial balance and final balance
+            from math import pow
+            self.ival = self.ival * (1.0 - self.ltv)
+            r = pow((self.ival/self.ib),1.0/self.yrs) -1
+            r = r*100
+            return r 
+
+    vaal = Calgr(ib,ival,yrs,ltv) 
+    valew = vaal.irate()
+    print("Interest rate achieved is %.2f%%") % valew
 
 if __name__ == '__main__':
     main()
