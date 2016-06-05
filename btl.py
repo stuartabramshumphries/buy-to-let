@@ -3,30 +3,30 @@
 
 
 def main():
-    ir = 0.03       # interest rates
+    ir = 0.04       # interest rates
     gr = 0.05       # property growth rate
-    ltv = 0.60      # loan to value
-    ib = 140000     # initial deposit/balance
-    yrs = 15         # years to model
+    ltv = 0.75     # loan to value
+    ib = 180000     # initial deposit/balance
+    yrs = 10       # years to model
     yld = 0.04      # rental yield
-    savings = 0     # amount added by savings
+    savings = 30000 # amount added by savings - note this messes up my interest rate achieved calc at the moment
 
     startval = ival = ib / (1 - ltv)
     for i in range(1, yrs + 1):
         ival += savings
         mortg = startval * ltv
-        ival = ival * (1 + gr)
-        print ival,startval
+        ival = ival * (1.0 + gr)
         if ival >= startval / ltv:
             print 'remortgaging as value increased enough:'
             newfunds = ltv * (ival - startval)
             ival = ival + newfunds / (1 - ltv)
             startval = ival
+            mortg = startval * ltv
         rent = ival * yld - mortg*ir
-        tax = (startval * yld - (0.2*ltv * ir * mortg))*0.45     # this is using the new bad taxes - assuming worst case
+        tax = (startval * yld - (0.2*ir * mortg))*0.45     # this is using the new bad taxes - assuming worst case
         netrent = rent -tax
         ival = ival + netrent
-        print 'year\t\t%d\t totval %d   val %.2f rent %d netrent %d' % (i, ival,
+        print 'year\t\t%d\t totval %d   netval %.2f rent %d netrent %d' % (i, ival,
                 ival * (1.0 - ltv),rent, netrent)
 
     class Calgr(object):
