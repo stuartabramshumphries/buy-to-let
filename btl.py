@@ -3,17 +3,17 @@
 
 def main():
     ir = 0.04       # interest rates
-    gr = 0.05       # property growth rate
+    gr = 0.04       # property growth rate
     ltv = 0.75     # loan to value
     ib = 180000     # initial deposit/balance
-    yrs = 10       # years to model
-    yld = 0.04      # rental yield
+    yrs = 20       # years to model
+    yld = 0.0344      # rental yield
     savings = 0  # amount added by savings - note this messes up my interest rate achieved calc at the moment
 
     startval = ival = ib / (1 - ltv)
+    mortg = startval * ltv
     for i in range(1, yrs + 1):
         ival += savings
-        mortg = startval * ltv
         ival = ival * (1.0 + gr)
         if ival >= startval / ltv:
             print 'remortgaging as value increased enough:'
@@ -23,7 +23,7 @@ def main():
             mortg = startval * ltv
         rent = ival * yld - mortg * ir
         # this is using the new bad taxes - assuming worst case
-        tax = (startval * yld - (0.2 * ir * mortg)) * 0.45
+        tax = (startval * yld - (0.2 * ir * mortg)) * 0.40
         netrent = rent - tax
         ival = ival + netrent
         print 'year\t\t%d\t totval %d   netval %.2f rent %d netrent %d' % (i, ival,
@@ -31,22 +31,23 @@ def main():
 
     class Calgr(object):
 
-        def __init__(self, ib, ival, yrs, ltv):
+        def __init__(self, ib, ival, yrs, netval):
             self.ib = ib
             self.ival = ival
             self.yrs = yrs
             self.ltv = ltv
+            self.netval = netval
 
         def irate(self):
             # trying to get what the ir is given initial balance and final
             # balance
             from math import pow
-            self.ival = self.ival * (1.0 - self.ltv)
-            r = pow((self.ival / self.ib), 1.0 / self.yrs) - 1
+            r = pow((self.netval / self.ib), 1.0 / self.yrs) - 1
             r = r * 100
             return r
 
-    vaal = Calgr(ib, ival, yrs, ltv)
+    netval = ival * (1.0 - ltv)
+    vaal = Calgr(ib, ival, yrs, netval)
     valew = vaal.irate()
     print("Interest rate achieved is %.2f%%") % valew
 
