@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 
 def main():
-    ir = 0.04       # interest rates
-    gr = 0.04       # property growth rate
-    ltv = 0.75     # loan to value
+    ir = 0.0444       # interest rates
+    gr = 0.05       # property growth rate
+    ltv = 0.60     # loan to value
     ib = 180000     # initial deposit/balance
-    yrs = 20       # years to model
-    yld = 0.0344      # rental yield
+    yrs = 15       # years to model
+    yld = 0.0344      # rental yield (this is my personal value after agency fees/vacancies/costs)
     savings = 0  # amount added by savings - note this messes up my interest rate achieved calc at the moment
 
     startval = ival = ib / (1 - ltv)
@@ -16,7 +16,7 @@ def main():
         ival += savings
         ival = ival * (1.0 + gr)
         if ival >= startval / ltv:
-            print 'remortgaging as value increased enough:'
+            print 'remortgaging to buy additonal property as value increased enough:'
             newfunds = ltv * (ival - startval)
             ival = ival + newfunds / (1 - ltv)
             startval = ival
@@ -49,7 +49,7 @@ def main():
     netval = ival * (1.0 - ltv)
     vaal = Calgr(ib, ival, yrs, netval)
     valew = vaal.irate()
-    print("Interest rate achieved is %.2f%%") % valew
+    print("Interest rate achieved is %.2f%% this is after income taxes are paid, but not capital gains tax if sold") % valew
 
 if __name__ == '__main__':
     main()
