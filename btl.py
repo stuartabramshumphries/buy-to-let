@@ -3,15 +3,18 @@
 __author__ = "Stuart Abrams-Humphries (stuartabramshumphries@gmail.com)"
 
 def main():
-    ir=0.04  # interest rates
-    gr=0.04  # property growth rate
-    ltv=0.01; # loan to value
-    ib=180000  # initial deposit/balance
-    yrs=5  # years to model
-    yld=0.03  # rental yield
+    ir=0.035 # interest rates
+    gr=0.05  # property growth rate
+    ltv=0.6 # loan to value
+    ib=100000  # initial deposit/balance
+    yrs=15  # years to model
+    yld=0.04  # rental yield
     savings=0  # amount added by savings - note this messes up my interest rate achieved calc at the moment
+    ib
+    startval=ib/(1 - ltv)
+    ival=startval
+    print startval
 
-    startval=ival=ib / (1 - ltv)
     for i in range(1, yrs + 1):
         ival+=savings
         mortg=startval * ltv
