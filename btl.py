@@ -10,7 +10,6 @@ def main():
     yrs=15  # years to model
     yld=0.04  # rental yield
     savings=0  # amount added by savings - note this messes up my interest rate achieved calc at the moment
-    ib
     startval=ib/(1 - ltv)
     ival=startval
     print startval
