@@ -9,12 +9,13 @@ __license__ = "GPL"
 
 
 def main():
-    ir = 0.05                      # interest rate
-    gr = 0.06                      # property growth rate
+    ir = 0.035                     # interest rate
+    gr = 0.035                      # property growth rate
     ltv = 0.75                     # loan to value
     ib = 100000                    # initial deposit/balance
-    yrs = 10                       # years to model
-    yld = 0.05                     # rental yield
+    yrs = 20                       # years to model
+    yld = 0.04                     # rental yield
+    mortgv = 0			   # initial mortgages
     savings = 0                    # amount added by savings
     startval = ib / (1.0 - ltv)    # initial price of property
     ival = startval
@@ -24,7 +25,7 @@ def main():
         mortg = startval * ltv
         imortg = mortg
         ival *= (1.0 + gr)
-        if ival >= startval / ltv:
+        if ival >= startval *1.2:
             print 'remortgaging as value increased enough:'
             newfunds = ltv * (ival - startval)
             ival += newfunds / (1 - ltv)
