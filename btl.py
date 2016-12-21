@@ -11,7 +11,7 @@ __license__ = "GPL"
 def main():
     import os
     ir = 0.035                     # interest rate
-    gr = 0.06                      # property growth rate
+    gr = 0.04                      # property growth rate
     ltv = 0.75                     # loan to value
     ib = 100000                    # initial deposit/balance
     yrs = 20                       # years to model
@@ -21,6 +21,7 @@ def main():
     startval = ib / (1.0 - ltv)    # initial price of property
     ival = startval
     yvals = []
+    yvals2 = []
     print startval
     for i in range(1, yrs + 1):
         ival += savings
@@ -38,6 +39,7 @@ def main():
         netrent = rent - tax
         ival += netrent
         yvals.append(ival)
+        yvals2.append(ival -mortg)
         print 'year\t\t%d\t totval %d   netval %.2f rent %d netrent %d' % (i, ival,
                                                                            ival -mortg, rent, netrent)
 
@@ -64,20 +66,31 @@ def main():
 
     class Graphit(object):
     
-        def __init__(self, xvals, yvals):
+        def __init__(self, xvals, yvals,yvals2):
             self.xvals = xvals
             self.yvals = yvals
+            self.yvals2 = yvals2
 
         def pretty(self):
             import matplotlib.pyplot as pyplot
+            fig_size = pyplot.rcParams["figure.figsize"]
+            print fig_size
+            fig_size[0] = 15.0
+            fig_size[1] = 15.0
+            pyplot.rcParams["figure.figsize"] = fig_size
+            print fig_size
             pyplot.title('portfolio growth over years')
             pyplot.xlabel('Years')
             pyplot.ylabel('portfolio value')
-            pyplot.plot(xvals,yvals,color='blue',linestyle='dashed',label='total value')
+            pyplot.plot(xvals,yvals,color='blue',linestyle='dashed',label='total value',linewidth=5.0)
+            pyplot.plot(xvals,yvals2,color='green',linestyle='dashed',label='net value',linewidth=5.0)
+            pyplot.legend(loc='upper left')
             pyplot.savefig('./graph.png')
+
     xvals = range(0,yrs)
-    graf = Graphit(xvals, yvals)
+    graf = Graphit(xvals, yvals,yvals2)
     graf.pretty()
     os.popen('(eog --new-instance ./graph.png)&')
+
 if __name__ == '__main__':
     main()
