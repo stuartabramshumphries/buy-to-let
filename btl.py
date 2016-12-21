@@ -9,8 +9,9 @@ __license__ = "GPL"
 
 
 def main():
+    import os
     ir = 0.035                     # interest rate
-    gr = 0.035                      # property growth rate
+    gr = 0.06                      # property growth rate
     ltv = 0.75                     # loan to value
     ib = 100000                    # initial deposit/balance
     yrs = 20                       # years to model
@@ -19,6 +20,7 @@ def main():
     savings = 0                    # amount added by savings
     startval = ib / (1.0 - ltv)    # initial price of property
     ival = startval
+    yvals = []
     print startval
     for i in range(1, yrs + 1):
         ival += savings
@@ -35,6 +37,7 @@ def main():
         tax = (startval * yld - (0.2 * ir * mortg)) * 0.45  # this is using the new bad taxes - assuming worst case
         netrent = rent - tax
         ival += netrent
+        yvals.append(ival)
         print 'year\t\t%d\t totval %d   netval %.2f rent %d netrent %d' % (i, ival,
                                                                            ival -mortg, rent, netrent)
 
@@ -59,6 +62,22 @@ def main():
     valew = vaal.irate()
     print "Interest rate achieved is %.4f%%" % valew
 
+    class Graphit(object):
+    
+        def __init__(self, xvals, yvals):
+            self.xvals = xvals
+            self.yvals = yvals
 
+        def pretty(self):
+            import matplotlib.pyplot as pyplot
+            pyplot.title('portfolio growth over years')
+            pyplot.xlabel('Years')
+            pyplot.ylabel('portfolio value')
+            pyplot.plot(xvals,yvals,color='blue',linestyle='dashed',label='total value')
+            pyplot.savefig('./graph.png')
+    xvals = range(0,yrs)
+    graf = Graphit(xvals, yvals)
+    graf.pretty()
+    os.popen('(eog --new-instance ./graph.png)&')
 if __name__ == '__main__':
     main()
