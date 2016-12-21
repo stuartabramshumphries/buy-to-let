@@ -10,11 +10,12 @@ __license__    = "GPL"
 
 def main():
     import os
-    ir = 0.045                     # interest rate
-    gr = 0.055                      # property growth rate
-    ltv = 0.75                     # loan to value
+    import sys
+    ir = 0.035                     # interest rate
+    gr = 0.045                      # property growth rate
+    ltv = 0.55                     # loan to value
     ib = 100000                    # initial deposit/balance
-    yrs = 20                       # years to model
+    yrs = 5                       # years to model
     yld = 0.04                     # rental yield
     mortgv = 0			   # initial mortgages
     savings = 0                    # amount added by savings
@@ -22,7 +23,6 @@ def main():
     ival = startval
     yvals = []
     yvals2 = []
-    print startval
     for i in range(1, yrs + 1):
         ival += savings
         mortg = startval * ltv
@@ -78,11 +78,9 @@ def main():
         def pretty(self):
             import matplotlib.pyplot as pyplot
             fig_size = pyplot.rcParams["figure.figsize"]
-            print fig_size
             fig_size[0] = 15.0
             fig_size[1] = 15.0
             pyplot.rcParams["figure.figsize"] = fig_size
-            print fig_size
             pyplot.title('portfolio growth over years')
             pyplot.xlabel('Years')
             pyplot.ylabel('portfolio value')
@@ -103,10 +101,12 @@ def main():
             pyplot.legend(loc='upper left')
             pyplot.savefig('./graph.png')
 
-    xvals = range(0, yrs)
-    graf = Graphit(xvals, yvals, yvals2)
-    graf.pretty()
-    os.popen('(eog --new-instance ./graph.png)&')
+    if len(sys.argv) >1:
+        if sys.argv[1] =="graph":
+            xvals = range(0, yrs)
+            graf = Graphit(xvals, yvals, yvals2)
+            graf.pretty()
+            os.popen('(eog --new-instance ./graph.png)&')
 
 if __name__ == '__main__':
     main()
