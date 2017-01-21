@@ -2,22 +2,21 @@
 # -*- coding: utf-8 -*-
 # need to add more info here for other users or extend the README
 
-__author__     = "Stuart Abrams-Humphries"
-__email__      = "Stuart Abrams-Humphries (stuartabramshumphries@gmail.com)"
+__author__ = "Stuart Abrams-Humphries"
+__email__ = "Stuart Abrams-Humphries (stuartabramshumphries@gmail.com)"
 __maintainer__ = "Stuart Abrams-Humphries"
-__license__    = "GPL"
+__license__ = "GPL"
 
 
 def main():
     import os
     import sys
-    ir = 0.035                     # interest rate
-    gr = 0.045                      # property growth rate
-    ltv = 0.55                     # loan to value
+    ir = 0.055                     # interest rate
+    gr = 0.035                      # property growth rate
+    ltv = 0.5                     # loan to value
     ib = 100000                    # initial deposit/balance
     yrs = 5                       # years to model
-    yld = 0.04                     # rental yield
-    mortgv = 0			   # initial mortgages
+    yld = 0.03                     # rental yield
     savings = 0                    # amount added by savings
     startval = ib / (1.0 - ltv)    # initial price of property
     ival = startval
@@ -26,17 +25,17 @@ def main():
     for i in range(1, yrs + 1):
         ival += savings
         mortg = startval * ltv
-        imortg = mortg
         ival *= (1.0 + gr)
-        if ival >= startval * 1.2:
+        if ival - 50000 >= startval:
             print 'remortgaging as value increased enough:'
             newfunds = ltv * (ival - startval)
             ival += newfunds / (1 - ltv)
             startval = ival
             mortg = startval * ltv
         rent = ival * yld - mortg * ir
-        # this is using the new bad taxes - assuming worst case
+    # this is using the new bad taxes - assuming worst case
         tax = (startval * yld - (0.2 * ir * mortg)) * 0.45
+     #   tax = (startval * yld - (ir * mortg)) * 0.20
         netrent = rent - tax
         ival += netrent
         yvals.append(ival)
@@ -101,12 +100,13 @@ def main():
             pyplot.legend(loc='upper left')
             pyplot.savefig('./graph.png')
 
-    if len(sys.argv) >1:
-        if sys.argv[1] =="graph":
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "graph":
             xvals = range(0, yrs)
             graf = Graphit(xvals, yvals, yvals2)
             graf.pretty()
             os.popen('(eog --new-instance ./graph.png)&')
+
 
 if __name__ == '__main__':
     main()
