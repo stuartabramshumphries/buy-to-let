@@ -2,27 +2,31 @@
 # -*- coding: utf-8 -*-
 # need to add more info here for other users or extend the README
 
-__author__ = "Stuart Abrams-Humphries"
-__email__ = "Stuart Abrams-Humphries (stuartabramshumphries@gmail.com)"
-__maintainer__ = "Stuart Abrams-Humphries"
-__license__ = "GPL"
+__author__      = "Stuart Abrams-Humphries"
+__email__       = "Stuart Abrams-Humphries (stuartabramshumphries@gmail.com)"
+__maintainer__  = "Stuart Abrams-Humphries"
+__license__     = "GPL"
 
 
 def main():
     import os
     import sys
-    ir = 0.055                     # interest rate
-    gr = 0.035                      # property growth rate
-    ltv = 0.5                     # loan to value
-    ib = 100000                    # initial deposit/balance
-    yrs = 5                       # years to model
-    yld = 0.03                     # rental yield
-    savings = 0                    # amount added by savings
-    startval = ib / (1.0 - ltv)    # initial price of property
+    def read_data():
+        with open("./data.in") as fin:
+            for val in fin.readlines():
+                if '#' in val:
+                    pass
+                else:
+                    return map(float,val.split())
+    (ir,gr,ltv,dep,yrs,retrn,savings) = read_data()
+    yrs = int(yrs)
+    # need to convert the vals to numbers/float/int
+    print (ir)
+    startval = dep / (1.0 - ltv)    # initial price of property
     ival = startval
     yvals = []
     yvals2 = []
-    for i in range(1, yrs + 1):
+    for i in range(1, int(yrs) + 1):
         ival += savings
         mortg = startval * ltv
         ival *= (1.0 + gr)
@@ -32,10 +36,10 @@ def main():
             ival += newfunds / (1 - ltv)
             startval = ival
             mortg = startval * ltv
-        rent = ival * yld - mortg * ir
+        rent = ival * retrn - mortg * ir
     # this is using the new bad taxes - assuming worst case
-        tax = (startval * yld - (0.2 * ir * mortg)) * 0.45
-     #   tax = (startval * yld - (ir * mortg)) * 0.20
+      #  tax = (startval * retrn - (0.2 * ir * mortg)) * 0.45
+        tax = (startval * retrn - (ir * mortg)) * 0.20
         netrent = rent - tax
         ival += netrent
         yvals.append(ival)
@@ -45,8 +49,8 @@ def main():
 
     class Calgr(object):
 
-        def __init__(self, ib, ival, yrs, ltv, imortg, savings):
-            self.ib = ib
+        def __init__(self, dep, ival, yrs, ltv, imortg, savings):
+            self.dep = dep
             self.ival = ival
             self.yrs = yrs
             self.ltv = ltv
@@ -58,12 +62,12 @@ def main():
             # balance
             from math import pow
             r = pow(
-                ((self.ival - self.imortg - self.savings * self.yrs) / self.ib),
+                ((self.ival - self.imortg - self.savings * self.yrs) / self.dep),
                 1.0 / self.yrs) - 1
             r *= 100
             return r
 
-    vaal = Calgr(ib, ival, yrs, ltv, mortg, savings)
+    vaal = Calgr(dep, ival, yrs, ltv, mortg, savings)
     valew = vaal.irate()
     print "Interest rate achieved is %.4f%%" % valew
 
@@ -80,7 +84,7 @@ def main():
             fig_size[0] = 15.0
             fig_size[1] = 15.0
             pyplot.rcParams["figure.figsize"] = fig_size
-            pyplot.title('portfolio growth over years')
+            pyplot.title('portfolio growth over yrs')
             pyplot.xlabel('Years')
             pyplot.ylabel('portfolio value')
             pyplot.plot(
@@ -105,8 +109,7 @@ def main():
             xvals = range(0, yrs)
             graf = Graphit(xvals, yvals, yvals2)
             graf.pretty()
-            os.popen('(eog --new-instance ./graph.png)&')
-
+            os.popen('(open ./graph.png)&')
 
 if __name__ == '__main__':
     main()
