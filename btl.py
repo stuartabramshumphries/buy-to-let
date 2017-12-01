@@ -1,4 +1,4 @@
-#!/usr/bin/python
+ #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # need to add more info here for other users or extend the README
 
@@ -20,8 +20,6 @@ def main():
                     return map(float,val.split())
     (ir,gr,ltv,dep,yrs,retrn,savings) = read_data()
     yrs = int(yrs)
-    # need to convert the vals to numbers/float/int
-    print (ir)
     startval = dep / (1.0 - ltv)    # initial price of property
     ival = startval
     yvals = []
