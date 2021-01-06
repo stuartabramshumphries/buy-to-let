@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # need to add more info here for other users or extend the README
 
@@ -17,7 +17,7 @@ def main():
                 if '#' in val:
                     pass
                 else:
-                    return map(float,val.split())
+                    return list(map(float,val.split()))
     (ir,gr,ltv,dep,yrs,retrn,savings) = read_data()
     yrs = int(yrs)
     startval = dep / (1.0 - ltv)    # initial price of property
@@ -29,7 +29,7 @@ def main():
         mortg = startval * ltv
         ival *= (1.0 + gr)
         if ival - 50000 >= startval:
-            print 'remortgaging as value increased enough:'
+            print('remortgaging as value increased enough:')
             newfunds = ltv * (ival - startval)
             ival += newfunds / (1 - ltv)
             startval = ival
@@ -39,11 +39,11 @@ def main():
       #  tax = (startval * retrn - (0.2 * ir * mortg)) * 0.45
         tax = (startval * retrn - (ir * mortg)) * 0.20
         netrent = rent - tax
-        ival += netrent
+        #ival += netrent
         yvals.append(ival)
         yvals2.append(ival - mortg)
-        print 'year\t\t%d\t totval %d   netval %.2f rent %d netrent %d' % (i, ival,
-                                                                           ival - mortg, rent, netrent)
+        print('year\t\t%d\t totval %d   netval %.2f rent %d netrent %d' % (i, ival,
+                                                                           ival - mortg, rent, netrent))
 
     class Calgr(object):
 
@@ -67,7 +67,7 @@ def main():
 
     vaal = Calgr(dep, ival, yrs, ltv, mortg, savings)
     valew = vaal.irate()
-    print "Interest rate achieved is %.4f%%" % valew
+    print("Interest rate achieved is %.4f%%" % valew)
 
     class Graphit(object):
 
@@ -104,7 +104,7 @@ def main():
 
     if len(sys.argv) > 1:
         if sys.argv[1] == "graph":
-            xvals = range(0, yrs)
+            xvals = list(range(0, yrs))
             graf = Graphit(xvals, yvals, yvals2)
             graf.pretty()
             os.popen('(open ./graph.png)&')
